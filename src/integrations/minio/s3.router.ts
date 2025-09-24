@@ -39,6 +39,13 @@ import { HttpStatus } from '../../app.module';
 import { routerPath, dataValidate } from '../../validate/router.validate';
 import { S3Service } from './s3.service';
 
+/**
+ * @function S3Router
+ * @description Creates and configures an Express router for S3-related endpoints.
+ * @param {S3Service} s3Service - The S3 service instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function S3Router(s3Service: S3Service, ...guards: RequestHandler[]) {
   const router = Router()
     .post(routerPath('findMedia'), ...guards, async (req, res) => {

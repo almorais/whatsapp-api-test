@@ -54,7 +54,19 @@ import { Instance } from '@prisma/client';
 import { ProviderFiles } from '../../provider/sessions';
 import { Websocket } from '../../websocket/server';
 
+/**
+ * @class WAMonitoringService
+ * @description Service for monitoring and managing WhatsApp instances.
+ */
 export class WAMonitoringService {
+  /**
+   * @constructor
+   * @param {EventEmitter2} eventEmitter - The event emitter.
+   * @param {ConfigService} configService - The configuration service.
+   * @param {Repository} repository - The repository for database operations.
+   * @param {ProviderFiles} providerFiles - The provider for session files.
+   * @param {Websocket} ws - The WebSocket server.
+   */
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
@@ -79,6 +91,12 @@ export class WAMonitoringService {
 
   private readonly instanceDelTimeout = {};
 
+  /**
+   * @method addInstance
+   * @description Adds or replaces a WhatsApp instance in the monitoring service.
+   * @param {string} instanceName - The name of the instance.
+   * @param {WAStartupService} instance - The instance to add.
+   */
   public addInstance(instanceName: string, instance: WAStartupService) {
     const currentInstance = this.waInstances.get(instanceName);
     if (currentInstance) {
@@ -88,6 +106,11 @@ export class WAMonitoringService {
     this.delInstanceTime(instanceName);
   }
 
+  /**
+   * @method delInstanceTime
+   * @description Sets a timeout to delete an instance if it's not connected.
+   * @param {string} instance - The name of the instance.
+   */
   public delInstanceTime(instance: string) {
     const time = this.configService.get<InstanceExpirationTime>(
       'INSTANCE_EXPIRATION_TIME',
@@ -111,6 +134,12 @@ export class WAMonitoringService {
     }
   }
 
+  /**
+   * @method cleaningUp
+   * @private
+   * @description Cleans up an instance by removing listeners and session files.
+   * @param {Instance} instance - The instance to clean up.
+   */
   private async cleaningUp({ name }: Instance) {
     this.clearListeners(name);
     if (this.providerSession?.ENABLED) {
@@ -127,6 +156,12 @@ export class WAMonitoringService {
     });
   }
 
+  /**
+   * @method clearListeners
+   * @private
+   * @description Clears all event listeners for a given instance.
+   * @param {string} instanceName - The name of the instance.
+   */
   private clearListeners(instanceName: string) {
     try {
       this.waInstances
@@ -139,6 +174,10 @@ export class WAMonitoringService {
     }
   }
 
+  /**
+   * @method loadInstance
+   * @description Loads all instances from the storage and connects them to WhatsApp.
+   */
   public async loadInstance() {
     const set = async (name: string) => {
       const instance = await this.repository.instance.findUnique({
@@ -188,6 +227,11 @@ export class WAMonitoringService {
     }
   }
 
+  /**
+   * @method removeInstance
+   * @private
+   * @description Sets up an event listener to remove an instance.
+   */
   private removeInstance() {
     this.eventEmitter.on('remove.instance', async (instance: Instance) => {
       try {
@@ -213,6 +257,11 @@ export class WAMonitoringService {
     });
   }
 
+  /**
+   * @method noConnection
+   * @private
+   * @description Sets up an event listener to handle instances with no connection.
+   */
   private noConnection() {
     this.eventEmitter.on('no.connection', async (instance: Instance) => {
       const waInstance = this.waInstances.get(instance.name);

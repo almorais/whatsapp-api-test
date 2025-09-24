@@ -36,12 +36,28 @@ import { Logger } from '../config/logger.config';
 import { Repository } from '../repository/repository.service';
 import { ConfigService, Database } from '../config/env.config';
 
+/**
+ * @class LoggerMiddleware
+ * @description Middleware for logging HTTP requests and saving activity logs.
+ */
 export class LoggerMiddleware {
+  /**
+   * @constructor
+   * @param {Repository} repository - The repository for database operations.
+   * @param {ConfigService} configService - The configuration service instance.
+   */
   constructor(
     private readonly repository: Repository,
     private readonly configService: ConfigService,
   ) {}
 
+  /**
+   * @method use
+   * @description The middleware function that logs the request and saves activity logs.
+   * @param {Request} req - The Express request object.
+   * @param {Response} res - The Express response object.
+   * @param {NextFunction} next - The next middleware function.
+   */
   async use(req: Request, res: Response, next: NextFunction) {
     const logger = new Logger(this.configService, LoggerMiddleware.name);
 

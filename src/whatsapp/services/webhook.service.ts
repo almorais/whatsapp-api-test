@@ -40,12 +40,29 @@ import { InstanceDto } from '../dto/instance.dto';
 import { WebhookDto } from '../dto/webhook.dto';
 import { WAMonitoringService } from './monitor.service';
 
+/**
+ * @class WebhookService
+ * @description Service for managing webhooks.
+ */
 export class WebhookService {
+  /**
+   * @constructor
+   * @param {WAMonitoringService} waMonitor - The WhatsApp monitoring service.
+   * @param {Repository} repository - The repository for database operations.
+   */
   constructor(
     private readonly waMonitor: WAMonitoringService,
     private readonly repository: Repository,
   ) {}
 
+  /**
+   * @method create
+   * @description Creates or updates a webhook for an instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {WebhookDto} data - The webhook data.
+   * @returns {Promise<any>} A promise that resolves to the created or updated webhook.
+   * @throws {BadRequestException} If the instance is not found or if there is an error.
+   */
   public async create({ instanceName }: InstanceDto, data: WebhookDto) {
     try {
       const instance = this.waMonitor.waInstances.get(instanceName);
@@ -93,6 +110,12 @@ export class WebhookService {
     return await this.waMonitor.waInstances.get(instanceName).setWebhook(data as any);
   }
 
+  /**
+   * @method find
+   * @description Finds the webhook for an instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} A promise that resolves to the found webhook or a default object if not found.
+   */
   public async find({ instanceName }: InstanceDto) {
     try {
       return await this.repository.webhook.findFirst({

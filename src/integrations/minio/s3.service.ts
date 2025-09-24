@@ -37,9 +37,24 @@ import { MediaDto } from '../../whatsapp/dto/media.dto';
 import { getObjectUrl } from './minio.utils';
 import { Repository } from '../../repository/repository.service';
 
+/**
+ * @class S3Service
+ * @description Service for handling S3-related operations, such as retrieving media files and generating URLs.
+ */
 export class S3Service {
+  /**
+   * @constructor
+   * @param {Repository} repository - The repository for database operations.
+   */
   constructor(private readonly repository: Repository) {}
 
+  /**
+   * @method getMedia
+   * @description Retrieves media files from the database based on a query.
+   * @param {MediaDto} [query] - The query to filter media files.
+   * @returns {Promise<any>} A promise that resolves with the found media files.
+   * @throws {BadRequestException} If the media is not found or if there is an error.
+   */
   public async getMedia(query?: MediaDto) {
     try {
       const media = await this.repository.media.findMany({
@@ -64,6 +79,13 @@ export class S3Service {
     }
   }
 
+  /**
+   * @method getMediaUrl
+   * @description Generates a presigned URL for a media file.
+   * @param {string} id - The ID of the media file.
+   * @param {number} [expiry] - The expiry time for the URL in seconds.
+   * @returns {Promise<any>} A promise that resolves with the media URL and media details.
+   */
   public async getMediaUrl(id: string, expiry?: number) {
     const mediaId = Number.parseInt(id);
     const media = (await this.getMedia({ id: mediaId }))[0];

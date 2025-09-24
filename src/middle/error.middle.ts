@@ -34,7 +34,19 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpStatus } from '../app.module';
 
+/**
+ * @class ErrorMiddle
+ * @description Middleware for handling errors in the application.
+ */
 export class ErrorMiddle {
+  /**
+   * @method pageNotFound
+   * @static
+   * @description Handles requests for non-existent pages (404 Not Found).
+   * @param {Request} req - The Express request object.
+   * @param {Response} res - The Express response object.
+   * @param {NextFunction} next - The next middleware function.
+   */
   public static pageNotFound(req: Request, res: Response, next: NextFunction) {
     const { method, url } = req;
 
@@ -47,6 +59,15 @@ export class ErrorMiddle {
     next();
   }
 
+  /**
+   * @method appError
+   * @static
+   * @description Handles application-level errors.
+   * @param {Error} err - The error object.
+   * @param {Request} _ - The Express request object (unused).
+   * @param {Response} res - The Express response object.
+   * @param {NextFunction} __ - The next middleware function (unused).
+   */
   public static appError(err: Error, _: Request, res: Response, __: NextFunction) {
     if (err) {
       res.status(err['status'] || 500).json(err);

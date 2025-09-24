@@ -43,13 +43,35 @@ import {
 import { InstanceDto } from '../dto/instance.dto';
 import { WAMonitoringService } from '../services/monitor.service';
 
+/**
+ * @class GroupController
+ * @description Controller for handling group-related operations.
+ */
 export class GroupController {
+  /**
+   * @constructor
+   * @param {WAMonitoringService} waMonitor - The WhatsApp monitoring service.
+   */
   constructor(private readonly waMonitor: WAMonitoringService) {}
 
+  /**
+   * @method createGroup
+   * @description Creates a new group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {CreateGroupDto} create - The data for creating the group.
+   * @returns {Promise<any>} The result of the group creation.
+   */
   public async createGroup({ instanceName }: InstanceDto, create: CreateGroupDto) {
     return await this.waMonitor.waInstances.get(instanceName).createGroup(create);
   }
 
+  /**
+   * @method updateGroupPicture
+   * @description Updates the group picture.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupPictureDto} update - The data for updating the group picture.
+   * @returns {Promise<any>} The result of the update.
+   */
   public async updateGroupPicture(
     { instanceName }: InstanceDto,
     update: GroupPictureDto,
@@ -57,28 +79,69 @@ export class GroupController {
     return await this.waMonitor.waInstances.get(instanceName).updateGroupPicture(update);
   }
 
+  /**
+   * @method findGroupInfo
+   * @description Finds group information.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupJid} groupJid - The group JID.
+   * @returns {Promise<any>} The group information.
+   */
   public async findGroupInfo({ instanceName }: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances.get(instanceName).findGroup(groupJid);
   }
 
+  /**
+   * @method allGroups
+   * @description Fetches all groups.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} A list of all groups.
+   */
   public async allGroups({ instanceName }: InstanceDto) {
     return await this.waMonitor.waInstances.get(instanceName).findAllGroups();
   }
 
+  /**
+   * @method inviteCode
+   * @description Gets the invite code for a group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupJid} groupJid - The group JID.
+   * @returns {Promise<any>} The invite code.
+   */
   public async inviteCode({ instanceName }: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances.get(instanceName).invitationCode(groupJid);
   }
 
+  /**
+   * @method revokeInviteCode
+   * @description Revokes the invite code for a group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupJid} groupJid - The group JID.
+   * @returns {Promise<any>} The result of the revocation.
+   */
   public async revokeInviteCode({ instanceName }: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances
       .get(instanceName)
       .revokeInvitationCode(groupJid);
   }
 
+  /**
+   * @method findParticipants
+   * @description Finds the participants of a group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupJid} groupJid - The group JID.
+   * @returns {Promise<any>} The list of participants.
+   */
   public async findParticipants({ instanceName }: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances.get(instanceName).findParticipants(groupJid);
   }
 
+  /**
+   * @method updateGParticipate
+   * @description Updates the participants of a group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupUpdateParticipantDto} update - The data for updating the participants.
+   * @returns {Promise<any>} The result of the update.
+   */
   public async updateGParticipate(
     { instanceName }: InstanceDto,
     update: GroupUpdateParticipantDto,
@@ -86,6 +149,13 @@ export class GroupController {
     return await this.waMonitor.waInstances.get(instanceName).updateGParticipant(update);
   }
 
+  /**
+   * @method leaveGroup
+   * @description Leaves a group.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {GroupJid} groupJid - The group JID.
+   * @returns {Promise<any>} The result of leaving the group.
+   */
   public async leaveGroup({ instanceName }: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances.get(instanceName).leaveGroup(groupJid);
   }

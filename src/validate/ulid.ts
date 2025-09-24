@@ -33,6 +33,12 @@
 
 import { decodeTime } from 'ulid';
 
+/**
+ * @function isValidUlid
+ * @description Validates if a given string is a valid ULID.
+ * @param {string} id - The string to validate.
+ * @returns {boolean} True if the string is a valid ULID, false otherwise.
+ */
 export const isValidUlid = (id: string) => {
   const ulidPattern = /^[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}$/;
 

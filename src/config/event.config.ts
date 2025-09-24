@@ -34,6 +34,11 @@
 
 import EventEmitter2 from 'eventemitter2';
 
+/**
+ * @constant {EventEmitter2} eventEmitter
+ * @description An instance of EventEmitter2, configured for the application's event handling.
+ * It uses a dot as a delimiter for event names, does not emit 'newListener' events, and does not ignore errors.
+ */
 export const eventEmitter = new EventEmitter2({
   delimiter: '.',
   newListener: false,

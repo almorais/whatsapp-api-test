@@ -73,6 +73,14 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ROOT_DIR } from '../../config/path.config';
 
+/**
+ * @function validateMedia
+ * @description Middleware to validate media file uploads.
+ * @param {Request} req - The Express request object.
+ * @param {Response} _ - The Express response object (unused).
+ * @param {NextFunction} next - The next middleware function.
+ * @throws {BadRequestException} If the file is invalid.
+ */
 function validateMedia(req: Request, _: Response, next: NextFunction) {
   if (!req?.file || req.file.fieldname !== 'attachment') {
     throw new BadRequestException('Invalid File');
@@ -85,6 +93,13 @@ function validateMedia(req: Request, _: Response, next: NextFunction) {
   next();
 }
 
+/**
+ * @function MessageRouter
+ * @description Creates and configures an Express router for sending messages.
+ * @param {SendMessageController} sendMessageController - The send message controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function MessageRouter(
   sendMessageController: SendMessageController,
   ...guards: RequestHandler[]

@@ -44,12 +44,29 @@ import { Auth } from '@prisma/client';
 import { HttpStatus } from '../../app.module';
 import pkg from '../../../package.json';
 
+/**
+ * @class ViewsController
+ * @description Controller for rendering views, such as the QR code page.
+ */
 export class ViewsController {
+  /**
+   * @constructor
+   * @param {WAMonitoringService} waMonit - The WhatsApp monitoring service.
+   * @param {Repository} repository - The repository for database operations.
+   */
   constructor(
     private readonly waMonit: WAMonitoringService,
     private readonly repository: Repository,
   ) {}
 
+  /**
+   * @method qrcode
+   * @description Renders the QR code page for a given instance.
+   * @param {Request} request - The Express request object.
+   * @param {Response} response - The Express response object.
+   * @returns {Promise<Response>} The rendered response.
+   * @throws {BadRequestException} If the instance is already connected.
+   */
   public async qrcode(request: Request, response: Response) {
     try {
       const param = request.params as unknown as InstanceDto;

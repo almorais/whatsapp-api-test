@@ -131,17 +131,38 @@ export interface Env {
 
 export type Key = keyof Env;
 
+/**
+ * @class ConfigService
+ * @description Service to manage and provide access to environment variables.
+ * It loads the environment configuration from `.env` file and provides a `get` method to access the variables.
+ */
 export class ConfigService {
+  /**
+   * @constructor
+   * @description Initializes the ConfigService and loads the environment variables.
+   */
   constructor() {
     this.loadEnv();
   }
 
   private env: Env;
 
+  /**
+   * @method get
+   * @description Retrieves an environment variable by its key.
+   * @param {Key} key - The key of the environment variable.
+   * @returns {T} The value of the environment variable.
+   */
   public get<T = any>(key: Key) {
     return this.env[key] as T;
   }
 
+  /**
+   * @method loadEnv
+   * @private
+   * @description Loads and processes the environment variables from the `.env` file.
+   * It also performs some validation checks.
+   */
   private loadEnv() {
     this.env = this.envProcess();
     this.env.PRODUCTION = process.env?.NODE_ENV === 'PROD';

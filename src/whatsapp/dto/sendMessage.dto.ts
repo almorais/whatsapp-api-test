@@ -41,6 +41,10 @@
 import { proto, WAPresence } from '@whiskeysockets/baileys';
 import { ulid } from 'ulid';
 
+/**
+ * @class Options
+ * @description DTO for message options.
+ */
 export class Options {
   delay?: number;
   presence?: WAPresence;
@@ -49,22 +53,44 @@ export class Options {
   externalAttributes?: any;
   convertAudio?: boolean;
 }
+/**
+ * @class OptionsMessage
+ * @description DTO for message options.
+ */
 class OptionsMessage {
   options: Options;
 }
 
+/**
+ * @class Metadata
+ * @extends OptionsMessage
+ * @description DTO for message metadata.
+ */
 export class Metadata extends OptionsMessage {
   number: string;
 }
 
+/**
+ * @class TextMessage
+ * @description DTO for a text message.
+ */
 class TextMessage {
   text: string;
 }
+/**
+ * @class SendTextDto
+ * @extends Metadata
+ * @description DTO for sending a text message.
+ */
 export class SendTextDto extends Metadata {
   textMessage: TextMessage;
 }
 
 export type MediaType = 'image' | 'document' | 'video' | 'audio';
+/**
+ * @class MediaMessage
+ * @description DTO for a media message.
+ */
 export class MediaMessage {
   mediatype: MediaType;
   caption?: string;
@@ -73,10 +99,20 @@ export class MediaMessage {
   media: string | Buffer;
   extension?: string;
 }
+/**
+ * @class SendMediaDto
+ * @extends Metadata
+ * @description DTO for sending a media message.
+ */
 export class SendMediaDto extends Metadata {
   mediaMessage: MediaMessage;
 }
 
+/**
+ * @class MediaFileDto
+ * @extends Metadata
+ * @description DTO for sending a media file.
+ */
 export class MediaFileDto extends Metadata {
   caption?: string;
   mediatype: MediaType;
@@ -84,42 +120,82 @@ export class MediaFileDto extends Metadata {
   delay: number;
 }
 
+/**
+ * @class Audio
+ * @description DTO for an audio message.
+ */
 class Audio {
   audio: string;
 }
+/**
+ * @class SendAudioDto
+ * @extends Metadata
+ * @description DTO for sending an audio message.
+ */
 export class SendAudioDto extends Metadata {
   audioMessage: Audio;
 }
 
+/**
+ * @class AudioMessageFileDto
+ * @extends Metadata
+ * @description DTO for sending an audio file.
+ */
 export class AudioMessageFileDto extends Metadata {
   delay: number;
   audio: Buffer;
   convertAudio: boolean | string;
 }
 
+/**
+ * @class LocationMessage
+ * @description DTO for a location message.
+ */
 class LocationMessage {
   latitude: number;
   longitude: number;
   name?: string;
   address?: string;
 }
+/**
+ * @class SendLocationDto
+ * @extends Metadata
+ * @description DTO for sending a location message.
+ */
 export class SendLocationDto extends Metadata {
   locationMessage: LocationMessage;
 }
 
+/**
+ * @class ContactMessage
+ * @description DTO for a contact message.
+ */
 export class ContactMessage {
   fullName: string;
   wuid: string;
   phoneNumber: string;
 }
+/**
+ * @class SendContactDto
+ * @extends Metadata
+ * @description DTO for sending a contact message.
+ */
 export class SendContactDto extends Metadata {
   contactMessage: ContactMessage[];
 }
 
+/**
+ * @class ReactionMessage
+ * @description DTO for a reaction message.
+ */
 class ReactionMessage {
   key: proto.IMessageKey;
   reaction: string;
 }
+/**
+ * @class SendReactionDto
+ * @description DTO for sending a reaction message.
+ */
 export class SendReactionDto {
   reactionMessage: ReactionMessage;
 }

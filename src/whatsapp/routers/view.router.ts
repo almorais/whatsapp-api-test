@@ -38,6 +38,13 @@ import { RequestHandler, Router } from 'express';
 import { ViewsController } from '../controllers/views.controller';
 import { routerPath } from '../../validate/router.validate';
 
+/**
+ * @function ViewsRouter
+ * @description Creates and configures an Express router for view-related endpoints.
+ * @param {ViewsController} viewsController - The views controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function ViewsRouter(
   viewsController: ViewsController,
   ...guards: RequestHandler[]

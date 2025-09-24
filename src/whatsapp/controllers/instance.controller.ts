@@ -57,7 +57,21 @@ import { isString } from 'class-validator';
 import { ProviderFiles } from '../../provider/sessions';
 import { Websocket } from '../../websocket/server';
 
+/**
+ * @class InstanceController
+ * @description Controller for handling WhatsApp instances.
+ */
 export class InstanceController {
+  /**
+   * @constructor
+   * @param {WAMonitoringService} waMonitor - The WhatsApp monitoring service.
+   * @param {ConfigService} configService - The configuration service.
+   * @param {Repository} repository - The repository for database operations.
+   * @param {EventEmitter2} eventEmitter - The event emitter.
+   * @param {InstanceService} instanceService - The instance service.
+   * @param {ProviderFiles} providerFiles - The provider for session files.
+   * @param {Websocket} ws - The WebSocket server.
+   */
   constructor(
     private readonly waMonitor: WAMonitoringService,
     private readonly configService: ConfigService,
@@ -70,6 +84,14 @@ export class InstanceController {
 
   private readonly logger = new Logger(this.configService, InstanceController.name);
 
+  /**
+   * @method createInstance
+   * @description Creates a new WhatsApp instance.
+   * @param {InstanceDto} instance - The instance data.
+   * @param {Request} req - The Express request object.
+   * @returns {Promise<any>} The created instance data.
+   * @throws {InternalServerErrorException} If there is an error creating the session.
+   */
   public async createInstance(instance: InstanceDto, req: Request) {
     const created = await this.instanceService.createInstance(instance);
     try {
@@ -83,6 +105,12 @@ export class InstanceController {
     }
   }
 
+  /**
+   * @method reloadConnection
+   * @description Reloads the connection for a WhatsApp instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} The connection state after reloading.
+   */
   public async reloadConnection({ instanceName }: InstanceDto) {
     try {
       const instance = this.waMonitor.waInstances[instanceName];
@@ -101,6 +129,14 @@ export class InstanceController {
     }
   }
 
+  /**
+   * @method connectToWhatsapp
+   * @description Connects a WhatsApp instance to WhatsApp.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} The QR code or connection status.
+   * @throws {NotFoundException} If the instance is not found.
+   * @throws {BadRequestException} If the instance is already connected or there is an error.
+   */
   public async connectToWhatsapp({ instanceName }: InstanceDto) {
     const find = await this.repository.instance.findUnique({
       where: { name: instanceName },
@@ -148,6 +184,13 @@ export class InstanceController {
     }
   }
 
+  /**
+   * @method updateInstance
+   * @description Updates a WhatsApp instance.
+   * @param {InstanceDto} instance - The instance data to update.
+   * @returns {Promise<any>} The updated instance data.
+   * @throws {BadRequestException} If there is an error during the update.
+   */
   public async updateInstance(instance: InstanceDto) {
     try {
       const instanceData = await this.instanceService.updateInstance(instance);
@@ -159,7 +202,11 @@ export class InstanceController {
   }
 
   /**
+   * @method connectionState
    * @deprecated
+   * @description Gets the connection state of a WhatsApp instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} The connection state.
    */
   public async connectionState({ instanceName }: InstanceDto) {
     const instance = this.waMonitor.waInstances.get(instanceName);
@@ -172,6 +219,13 @@ export class InstanceController {
     return this.waMonitor.waInstances.get(instanceName).getInstance().status;
   }
 
+  /**
+   * @method fetchInstance
+   * @description Fetches a WhatsApp instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} The fetched instance data.
+   * @throws {BadRequestException} If the instance is not found.
+   */
   public async fetchInstance({ instanceName }: InstanceDto) {
     try {
       const instance = (await this.instanceService.fetchInstance(instanceName))[0];
@@ -197,6 +251,13 @@ export class InstanceController {
     }
   }
 
+  /**
+   * @method fetchInstances
+   * @description Fetches all WhatsApp instances or a specific one.
+   * @param {InstanceDto} instanceDto - The instance data (optional).
+   * @returns {Promise<any>} The list of instances.
+   * @throws {BadRequestException} If instanceName is not a string or the instance is not found.
+   */
   public async fetchInstances({ instanceName }: InstanceDto) {
     if (instanceName && !isString(instanceName)) {
       throw new BadRequestException('instanceName must be a string');
@@ -212,6 +273,13 @@ export class InstanceController {
     return await this.instanceService.fetchInstance();
   }
 
+  /**
+   * @method logout
+   * @description Logs out a WhatsApp instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @returns {Promise<any>} A confirmation message.
+   * @throws {InternalServerErrorException} If there is an error during logout.
+   */
   public async logout({ instanceName }: InstanceDto) {
     try {
       await this.waMonitor.waInstances
@@ -223,6 +291,14 @@ export class InstanceController {
     }
   }
 
+  /**
+   * @method deleteInstance
+   * @description Deletes a WhatsApp instance.
+   * @param {InstanceDto} instanceDto - The instance data.
+   * @param {boolean} [force] - Whether to force delete the instance.
+   * @returns {Promise<any>} The deleted instance data.
+   * @throws {BadRequestException} If the instance is still connected.
+   */
   public async deleteInstance({ instanceName }: InstanceDto, force?: boolean) {
     const instance = this.waMonitor.waInstances.get(instanceName);
     if (instance && instance.getInstance()?.status?.state === 'open') {
@@ -237,6 +313,14 @@ export class InstanceController {
     return del;
   }
 
+  /**
+   * @method refreshToken
+   * @description Refreshes the authentication token for an instance.
+   * @param {InstanceDto} instance - The instance data.
+   * @param {OldToken} oldToken - The old token.
+   * @param {Request} req - The Express request object.
+   * @returns {Promise<void>}
+   */
   public async refreshToken(instance: InstanceDto, oldToken: OldToken, req: Request) {
     const token = await this.instanceService.refreshToken(oldToken);
 

@@ -42,6 +42,13 @@ import { HttpStatus } from '../../app.module';
 import { InstanceController } from '../controllers/instance.controller';
 import { dataValidate, routerPath } from '../../validate/router.validate';
 
+/**
+ * @function InstanceRouter
+ * @description Creates and configures an Express router for instance-related endpoints.
+ * @param {InstanceController} instanceController - The instance controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function InstanceRouter(
   instanceController: InstanceController,
   ...guards: RequestHandler[]

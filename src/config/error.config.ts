@@ -35,6 +35,12 @@
 import { ConfigService } from './env.config';
 import { Logger } from './logger.config';
 
+/**
+ * @function onUnexpectedError
+ * @description Handles unexpected errors by setting up global exception handlers.
+ * It listens for 'uncaughtException' and 'unhandledRejection' events, logging the errors using the provided logger.
+ * @param {ConfigService} configService - The configuration service instance.
+ */
 export function onUnexpectedError(configService: ConfigService) {
   const logger = new Logger(configService);
   process.on('uncaughtException', (error, origin) => {

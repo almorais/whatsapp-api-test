@@ -56,6 +56,11 @@ const queryParams = new URLSearchParams({
   version: pkg.version,
 });
 
+/**
+ * @constant {Router} docsRouter
+ * @description An Express router for serving the Swagger UI documentation.
+ * It reads the Swagger definition from a YAML file, customizes it, and sets up the Swagger UI endpoint.
+ */
 export const docsRouter = router.use(
   '/docs',
   serve,

@@ -44,14 +44,38 @@ import { Logger } from '../config/logger.config';
 import { GroupJid } from '../whatsapp/dto/group.dto';
 import { ConfigService } from '../config/env.config';
 
+/**
+ * @class DataValidate
+ * @template T
+ * @description Represents the data and schema for validation, along with the execution function.
+ */
 class DataValidate<T> {
+  /**
+   * @property {Request} request
+   * @description The Express request object.
+   */
   request: Request;
+  /**
+   * @property {JSONSchema7} schema
+   * @description The JSON schema for validation.
+   */
   schema: JSONSchema7;
+  /**
+   * @property {(instance: InstanceDto, data: T, file?: Express.Multer.File) => Promise<any>} execute
+   * @description The function to execute after successful validation.
+   */
   execute: (instance: InstanceDto, data: T, file?: Express.Multer.File) => Promise<any>;
 }
 
 const logger = new Logger(new ConfigService(), 'Validate');
 
+/**
+ * @function routerPath
+ * @description Constructs a router path with an optional instance name parameter.
+ * @param {string} path - The base path.
+ * @param {boolean} [param=true] - Whether to include the instance name parameter.
+ * @returns {string} The constructed router path.
+ */
 export function routerPath(path: string, param = true) {
   let route = '/' + path;
   param ? (route += '/:instanceName') : null;
@@ -59,6 +83,14 @@ export function routerPath(path: string, param = true) {
   return route;
 }
 
+/**
+ * @function dataValidate
+ * @template T
+ * @description Validates request data against a JSON schema and executes a function if valid.
+ * @param {DataValidate<T>} args - The validation arguments.
+ * @returns {Promise<any>} A promise that resolves with the result of the execute function.
+ * @throws {BadRequestException} If the validation fails.
+ */
 export async function dataValidate<T>(args: DataValidate<T>) {
   const { request, schema, execute } = args;
 
@@ -104,6 +136,14 @@ export async function dataValidate<T>(args: DataValidate<T>) {
   return await execute(instance, body, request?.file);
 }
 
+/**
+ * @function groupValidate
+ * @template T
+ * @description Validates request data for group-related operations.
+ * @param {DataValidate<T>} args - The validation arguments.
+ * @returns {Promise<any>} A promise that resolves with the result of the execute function.
+ * @throws {BadRequestException} If the validation fails or the groupJid is missing.
+ */
 export async function groupValidate<T>(args: DataValidate<T>) {
   const { request, schema, execute } = args;
 
