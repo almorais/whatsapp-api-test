@@ -44,13 +44,26 @@ import { join } from 'path';
 type ResponseSuccess = { status: number; data?: any };
 type ResponseProvider = Promise<[ResponseSuccess?, Error?]>;
 
+/**
+ * @class ProviderFiles
+ * @description Provides an interface for interacting with a file-based session provider.
+ * This class handles the creation, reading, writing, and deletion of session files.
+ */
 export class ProviderFiles {
+  /**
+   * @constructor
+   * @param {ConfigService} configService - The configuration service instance.
+   */
   constructor(private readonly configService: ConfigService) {}
 
   private readonly logger = new Logger(this.configService, ProviderFiles.name);
 
   private _client: Axios;
 
+  /**
+   * @property {Axios} client
+   * @description The Axios client for making requests to the file provider.
+   */
   public get client() {
     return this._client;
   }
@@ -59,10 +72,19 @@ export class ProviderFiles {
     this.configService.get<ProviderSession>('PROVIDER'),
   );
 
+  /**
+   * @property {boolean} isEnabled
+   * @description Indicates whether the file provider is enabled.
+   */
   get isEnabled() {
     return !!this.config?.ENABLED;
   }
 
+  /**
+   * @method onModuleInit
+   * @description Initializes the module by connecting to the file provider and setting up the Axios client.
+   * If the connection fails, the process will be terminated.
+   */
   public async onModuleInit() {
     if (this.config.ENABLED) {
       const url = `http://${this.config.HOST}:${this.config.PORT}`;
@@ -99,10 +121,20 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method onModuleDestroy
+   * @description A lifecycle hook that is called when the module is destroyed.
+   */
   public async onModuleDestroy() {
     //
   }
 
+  /**
+   * @method create
+   * @description Creates a new instance in the file provider.
+   * @param {string} instance - The name of the instance to create.
+   * @returns {ResponseProvider} A promise that resolves with the response from the provider.
+   */
   public async create(instance: string): ResponseProvider {
     try {
       const response = await this._client.post('', { instance });
@@ -112,6 +144,14 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method write
+   * @description Writes data to a key for a specific instance.
+   * @param {string} instance - The instance name.
+   * @param {string} key - The key to write to.
+   * @param {any} data - The data to write.
+   * @returns {ResponseProvider} A promise that resolves with the response from the provider.
+   */
   public async write(instance: string, key: string, data: any): ResponseProvider {
     try {
       const response = await this._client.post(`/${instance}/${key}`, data);
@@ -121,6 +161,13 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method read
+   * @description Reads data from a key for a specific instance.
+   * @param {string} instance - The instance name.
+   * @param {string} key - The key to read from.
+   * @returns {ResponseProvider} A promise that resolves with the response from the provider.
+   */
   public async read(instance: string, key: string): ResponseProvider {
     try {
       const response = await this._client.get(`/${instance}/${key}`);
@@ -130,6 +177,13 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method delete
+   * @description Deletes a key for a specific instance.
+   * @param {string} instance - The instance name.
+   * @param {string} key - The key to delete.
+   * @returns {ResponseProvider} A promise that resolves with the response from the provider.
+   */
   public async delete(instance: string, key: string): ResponseProvider {
     try {
       const response = await this._client.delete(`/${instance}/${key}`);
@@ -139,6 +193,11 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method allInstances
+   * @description Retrieves a list of all instances.
+   * @returns {ResponseProvider} A promise that resolves with the list of instances.
+   */
   public async allInstances(): ResponseProvider {
     try {
       const response = await this._client.get(`/list-instances`);
@@ -148,6 +207,12 @@ export class ProviderFiles {
     }
   }
 
+  /**
+   * @method removeSession
+   * @description Removes an entire session (instance).
+   * @param {string} instance - The instance to remove.
+   * @returns {ResponseProvider} A promise that resolves with the response from the provider.
+   */
   public async removeSession(instance: string): ResponseProvider {
     try {
       const response = await this._client.delete(`/${instance}`);

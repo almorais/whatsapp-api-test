@@ -38,13 +38,34 @@ import { InstanceDto } from '../dto/instance.dto';
 import { WebhookDto } from '../dto/webhook.dto';
 import { WebhookService } from '../services/webhook.service';
 
+/**
+ * @class WebhookController
+ * @description Controller for handling webhook configurations.
+ */
 export class WebhookController {
+  /**
+   * @constructor
+   * @param {WebhookService} webhookService - The webhook service.
+   */
   constructor(private readonly webhookService: WebhookService) {}
 
+  /**
+   * @method createWebhook
+   * @description Creates or updates a webhook for an instance.
+   * @param {InstanceDto} instance - The instance data.
+   * @param {WebhookDto} data - The webhook data.
+   * @returns {Promise<any>} The result of the create or update operation.
+   */
   public async createWebhook(instance: InstanceDto, data: WebhookDto) {
     return await this.webhookService.create(instance, data);
   }
 
+  /**
+   * @method findWebhook
+   * @description Finds the webhook configuration for an instance.
+   * @param {InstanceDto} instance - The instance data.
+   * @returns {Promise<any>} The webhook configuration.
+   */
   public async findWebhook(instance: InstanceDto) {
     return await this.webhookService.find(instance);
   }

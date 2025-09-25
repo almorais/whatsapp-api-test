@@ -51,6 +51,10 @@ import { WebhookEvents } from '../dto/webhook.dto';
 import { WAMonitoringService } from './monitor.service';
 import { ulid } from 'ulid';
 
+/**
+ * @type JwtPayload
+ * @description Defines the structure of the JWT payload.
+ */
 export type JwtPayload = {
   instanceName: string;
   apiName: string;
@@ -59,11 +63,25 @@ export type JwtPayload = {
   tokenId: string;
 };
 
+/**
+ * @class OldToken
+ * @description DTO for the old token used in token refresh operations.
+ */
 export class OldToken {
   oldToken: string;
 }
 
+/**
+ * @class InstanceService
+ * @description Service for managing instances, including creation, updates, deletion, and token management.
+ */
 export class InstanceService {
+  /**
+   * @constructor
+   * @param {ConfigService} configService - The configuration service.
+   * @param {WAMonitoringService} waMonitor - The WhatsApp monitoring service.
+   * @param {Repository} repository - The repository for database operations.
+   */
   constructor(
     private readonly configService: ConfigService,
     private readonly waMonitor: WAMonitoringService,
@@ -72,6 +90,13 @@ export class InstanceService {
 
   private readonly logger = new Logger(this.configService, InstanceService.name);
 
+  /**
+   * @method generateToken
+   * @private
+   * @description Generates a JWT for an instance.
+   * @param {string} instanceName - The name of the instance.
+   * @returns {Promise<string>} A promise that resolves to the generated token.
+   */
   private async generateToken(instanceName: string) {
     const jwtOpts = this.configService.get<Auth>('AUTHENTICATION').JWT;
     const token = sign(
@@ -87,6 +112,13 @@ export class InstanceService {
     return token;
   }
 
+  /**
+   * @method createInstance
+   * @description Creates a new instance.
+   * @param {InstanceDto} instance - The instance data.
+   * @returns {Promise<any>} A promise that resolves to the created instance data.
+   * @throws {BadRequestException} If the instance already exists.
+   */
   public async createInstance(instance: InstanceDto) {
     const find = (await this.fetchInstance(instance.instanceName))[0];
     if (find) {
@@ -126,6 +158,13 @@ export class InstanceService {
     } catch (error) {}
   }
 
+  /**
+   * @method updateInstance
+   * @description Updates an existing instance.
+   * @param {InstanceDto} instance - The instance data to update.
+   * @returns {Promise<any>} A promise that resolves to the updated instance data.
+   * @throws {BadRequestException} If the instance is not found.
+   */
   public async updateInstance(instance: InstanceDto) {
     try {
       const find = (await this.fetchInstance(instance.instanceName))[0];
@@ -164,6 +203,12 @@ export class InstanceService {
     } catch (error) {}
   }
 
+  /**
+   * @method fetchInstance
+   * @description Fetches instances from the database.
+   * @param {string} [instanceName] - The name of the instance to fetch. If not provided, fetches all instances.
+   * @returns {Promise<any[]>} A promise that resolves to an array of instances.
+   */
   public async fetchInstance(instanceName?: string) {
     const instances = await this.repository.instance.findMany({
       where: { name: instanceName },
@@ -200,6 +245,14 @@ export class InstanceService {
     return instances;
   }
 
+  /**
+   * @method deleteInstance
+   * @description Deletes an instance.
+   * @param {InstanceDto} instance - The instance to delete.
+   * @param {boolean} [force=false] - Whether to force deletion even if there are dependencies.
+   * @returns {Promise<any>} A promise that resolves to the deleted instance data.
+   * @throws {BadRequestException} If the instance has dependencies and force is not true.
+   */
   public async deleteInstance(instance: InstanceDto, force = false) {
     try {
       const c1 = await this.repository.webhook.count({
@@ -239,6 +292,13 @@ export class InstanceService {
     }
   }
 
+  /**
+   * @method refreshToken
+   * @description Refreshes the JWT for an instance.
+   * @param {OldToken} oldToken - The old token to be refreshed.
+   * @returns {Promise<any>} A promise that resolves to the new authentication data.
+   * @throws {BadRequestException} If the old token is invalid.
+   */
   public async refreshToken({ oldToken }: OldToken) {
     if (!isJWT(oldToken)) {
       throw new BadRequestException('Invalid "oldToken"');

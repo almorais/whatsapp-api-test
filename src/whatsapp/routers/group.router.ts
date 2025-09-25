@@ -51,6 +51,13 @@ import { HttpStatus } from '../../app.module';
 import { GroupController } from '../controllers/group.controller';
 import { routerPath, dataValidate, groupValidate } from '../../validate/router.validate';
 
+/**
+ * @function GroupRouter
+ * @description Creates and configures an Express router for group-related endpoints.
+ * @param {GroupController} groupController - The group controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function GroupRouter(
   groupController: GroupController,
   ...guards: RequestHandler[]

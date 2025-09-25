@@ -49,7 +49,17 @@ import { ConfigService } from '../config/env.config';
 import { ProviderFiles } from '../provider/sessions';
 import { isNotEmpty } from 'class-validator';
 
+/**
+ * @class AuthStateProvider
+ * @description Provides a mechanism to manage the authentication state using a multi-file approach.
+ * This class handles reading, writing, and removing authentication data from a file-based storage system.
+ */
 export class AuthStateProvider {
+  /**
+   * @constructor
+   * @param {ConfigService} configService - The configuration service instance.
+   * @param {ProviderFiles} providerFiles - The provider for file operations.
+   */
   constructor(
     private readonly configService: ConfigService,
     private readonly providerFiles: ProviderFiles,
@@ -57,6 +67,13 @@ export class AuthStateProvider {
 
   private readonly logger = new Logger(this.configService, AuthStateProvider.name);
 
+  /**
+   * @method authStateProvider
+   * @description Initializes and returns the authentication state for a given instance.
+   * It sets up methods for reading, writing, and removing authentication data.
+   * @param {string} instance - The instance identifier.
+   * @returns {Promise<AuthState>} A promise that resolves to the authentication state object.
+   */
   public async authStateProvider(instance: string): Promise<AuthState> {
     const [, error] = await this.providerFiles.create(instance);
     if (error) {

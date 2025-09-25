@@ -40,6 +40,12 @@ import { LoggerMiddleware } from '../middle/logger.middle';
 import { ConfigService, Log } from './env.config';
 import dayjs from 'dayjs';
 
+/**
+ * @function formatDateLog
+ * @description Formats a timestamp into a readable date string.
+ * @param {number} timestamp - The timestamp to format.
+ * @returns {string} The formatted date string.
+ */
 const formatDateLog = (timestamp: number) =>
   dayjs(timestamp)
     .toDate()
@@ -92,7 +98,17 @@ enum Background {
   VERBOSE = '\x1b[47m',
 }
 
+/**
+ * @class Logger
+ * @description A custom logger class for the application.
+ * It supports different log levels, contexts, and color-coded output.
+ */
 export class Logger {
+  /**
+   * @constructor
+   * @param {ConfigService} configService - The configuration service instance.
+   * @param {string} [context='Logger'] - The context for the logger.
+   */
   constructor(
     private readonly configService: ConfigService,
     private context = 'Logger',
@@ -100,15 +116,33 @@ export class Logger {
 
   private subCtx: string;
 
+  /**
+   * @method setContext
+   * @description Sets the context for the logger.
+   * @param {string} value - The context value.
+   */
   public setContext(value: string) {
     this.context = value;
   }
 
+  /**
+   * @method subContext
+   * @description Sets a sub-context for the logger.
+   * @param {string} [value] - The sub-context value.
+   */
   public subContext(value?: string) {
     if (!value) return (this.subCtx = undefined);
     this.subCtx = value;
   }
 
+  /**
+   * @method console
+   * @private
+   * @description The core logging method. It formats and prints the log message to the console.
+   * @param {any} value - The value to log.
+   * @param {Type} type - The type of the log.
+   * @returns {any} The logged value.
+   */
   private console(value: any, type: Type) {
     const types: Type[] = [];
 
@@ -160,30 +194,72 @@ export class Logger {
     return value;
   }
 
+  /**
+   * @method log
+   * @description Logs a message with the 'LOG' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public log<T>(value: T): T {
     return this.console(value, Type.LOG);
   }
 
+  /**
+   * @method info
+   * @description Logs a message with the 'INFO' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public info<T>(value: T): T {
     return this.console(value, Type.INFO);
   }
 
+  /**
+   * @method warn
+   * @description Logs a message with the 'WARN' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public warn<T>(value: T): T {
     return this.console(value, Type.WARN);
   }
 
+  /**
+   * @method error
+   * @description Logs a message with the 'ERROR' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public error<T>(value: T): T {
     return this.console(value, Type.ERROR);
   }
 
+  /**
+   * @method verbose
+   * @description Logs a message with the 'VERBOSE' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public verbose<T>(value: T): T {
     return this.console(value, Type.VERBOSE);
   }
 
+  /**
+   * @method debug
+   * @description Logs a message with the 'DEBUG' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public debug<T>(value: T): T {
     return this.console(value, Type.DEBUG);
   }
 
+  /**
+   * @method dark
+   * @description Logs a message with the 'DARK' level.
+   * @param {T} value - The value to log.
+   * @returns {T} The logged value.
+   */
   public dark<T>(value: T): T {
     return this.console(value, Type.DARK);
   }

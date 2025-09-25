@@ -32,8 +32,24 @@
  * └──────────────────────────────────────────────────────────────────────────────┘
  */
 
+/**
+ * @class InstanceDto
+ * @description DTO for instance data.
+ */
 export class InstanceDto {
+  /**
+   * @property {string} instanceName
+   * @description The name of the instance.
+   */
   instanceName: string;
+  /**
+   * @property {string} [description]
+   * @description An optional description for the instance.
+   */
   description?: string;
+  /**
+   * @property {any} [externalAttributes]
+   * @description Optional external attributes for the instance.
+   */
   externalAttributes?: any;
 }

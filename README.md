@@ -1,241 +1,237 @@
-</br>
-<hr style="height: 5px;background: #007500;margin: 20px 0;box-shadow: 0px 3px 5px 0px rgb(204 204 204);">
+<div align="center">
+  <img src="./public/images/cover.png" alt="CodeChat API Cover">
+  <h1>WhatsApp API</h1>
+</div>
 
 <div align="center">
 
 [![Telegram Group](https://img.shields.io/badge/Group-Telegram-%2333C1FF)](https://t.me/codechatBR)
 [![Whatsapp Group](https://img.shields.io/badge/Group-WhatsApp-%2322BC18)](https://chat.whatsapp.com/HyO8X8K0bAo0bfaeW8bhY5)
-[![License](https://img.shields.io/badge/license-GPL--3.0-orange)](./LICENSE)
-[![Support](https://img.shields.io/badge/Buy%20me-coffe-orange)](https://app.picpay.com/user/cleber.wilson.oliveira)
-[![Support](https://img.shields.io/badge/Buy%20me%20coffe-pix-blue)](#pix-2b526ada-4ef4-4db4-bbeb-f60da2421fce)
+[![License](https://img.shields.io/badge/license-Apache--2.0-orange)](./LICENSE)
+[![Support](https://img.shields.io/badge/Buy%20me-a%20coffee-orange)](https://app.picpay.com/user/cleber.wilson.oliveira)
+[![Support](https://img.shields.io/badge/Donate-via%20Pix-blue)](#-donate-to-the-project)
 
 </div>
-  
-<div align="center"><img src="./public/images/cover.png"></div>
 
-## Project Structure
+---
 
-* [Look here](./PROJECT_STRUCTURE.md)
+## 🚀 Overview
 
-## WhatsApp-Api-NodeJs
+This project provides a powerful RESTful API for WhatsApp, built on top of the [WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys) library. It allows you to automate WhatsApp messaging, create chatbots, integrate with other systems, and manage multiple WhatsApp instances without needing deep knowledge of Node.js.
 
-This code is an implementation of [WhiskeySockets](https://github.com/WhiskeySockets/Baileys), as a RestFull Api service, which controls whatsapp functions.</br>
-With this one you can create multiservice chats, service bots or any other system that uses whatsapp. With this code you don't need to know javascript for nodejs , just start the server and make the language requests that you feel most comfortable with.
+## ✨ Features
 
-## Infrastructure
+- **Multi-instance Management:** Run and manage multiple WhatsApp accounts simultaneously.
+- **Comprehensive Messaging:** Send text, media (images, videos, documents, audio), locations, contacts, and reactions.
+- **Interactive Messages:** Support for buttons and lists (legacy).
+- **Group Management:** Create groups, manage participants (add, remove, promote, demote), and update group info.
+- **Webhook Integration:** Real-time event notifications for messages, connection status, presence, and more.
+- **Flexible Authentication:** Secure your API with JWT and a global API key.
+- **Database Integration:** Persist messages, contacts, chats, and logs using Prisma ORM with PostgreSQL.
+- **External Session Storage:** Use workers for session management, including file-based and SQLite options.
+- **Real-time Events:** WebSocket support for live event streaming.
+- **Dockerized:** Easy setup and deployment with Docker and Docker Compose.
+- **Swagger Documentation:** Interactive API documentation for easy testing and integration.
 
-### 1. Docker installation
+## 📂 Project Structure
 
-* First, let's install Docker. Docker is a platform that allows us to quickly create, test and deploy applications in isolated environments called containers.
+For a detailed explanation of the directory layout and file organization, please see the [Project Structure](./PROJECT_STRUCTURE.md) document.
+
+## 🛠️ Getting Started
+
+Follow these steps to set up and run the application on your local machine.
+
+### Prerequisites
+
+- **Node.js:** v20.x or higher. We recommend using [NVM](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+- **Docker:** For running the PostgreSQL database and the application in a containerized environment.
+
+### 1. Install Docker
+
+Docker allows you to run applications in isolated containers.
 
 ```sh
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker ${USER}
+# Log out and log back in for the changes to take effect.
 ```
 
-### 2. Installing the database
+### 2. Set Up the Database
 
-> PostgreSql [required]
-
-* Now, we have configured our PostgreSQL database using Docker Compose.
-* Access your postgre manager and create a database.
-
-[compose from postgres](./postgres/docker-compose.yaml)
-
-### 3. Nvm installation
+This project uses PostgreSQL as its database. A Docker Compose file is provided for easy setup.
 
 ```sh
+# Navigate to the postgres directory
+cd postgres
+
+# Start the PostgreSQL container
+docker-compose up -d
+```
+
+After the container is running, connect to it using your preferred database management tool and create a new database for the API.
+
+### 3. Install Node.js (using NVM)
+
+```sh
+# Install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-# or
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
->
-> After finishing, restart the terminal to load the new information.
->
 
-#### 3.1 Nodejs installation
-
-* Installing Node.js using NVM, a version manager that allows us to switch between different versions of Node.js easily.
-
-```sh
+# Restart your terminal, then install and use Node.js v20
 nvm install 20
+nvm use 20
 ```
 
-### 4. pm2 installation
+### 4. Install PM2 (Process Manager)
+
+PM2 is a production process manager for Node.js applications that helps keep your API alive.
+
 ```sh
 npm i -g pm2
 ```
 
-### 5. Application startup
-
-Cloning the Repository
-```
-git clone https://github.com/code-chat-br/whatsapp-api.git
-```
-
-Go to the project directory and install all dependencies.
-
->
-> Give preference to **npm** as it has greater compatibility.
->
+### 5. Clone and Install Dependencies
 
 ```sh
-cd whatsapp-api-v2
+# Clone the repository
+git clone https://github.com/code-chat-br/whatsapp-api.git
+cd whatsapp-api
 
+# Install dependencies (npm is recommended)
 npm install
-# or
-npm install --force
 ```
 
-### 6. Environment variables
-See additional settings that can be applied through the **env** file by clicking **[here](./.env.dev)**.
+### 6. Configure Environment Variables
 
-> **⚠️Attention⚠️:** copy the **.env.dev** file to **.env**.
+Copy the example environment file and customize it with your settings, especially the `DATABASE_URL`.
+
 ```sh
 cp .env.dev .env
 ```
 
-### 7. Prism ORM
+Review the settings in the `.env` file and update them as needed. Key variables are documented in the file itself.
 
-* We're going to use Prisma ORM to manage our database. Prisma simplifies database access and ensures operations are secure and easy to maintain.
-* **Commands and Explanations:**
-  * **In development environment: npx prisma migrate dev**
-    * We use `migrate dev` in development to automatically create and apply migrations, making working with the database easier.
-  * **In production environment: npx prisma migrate deploy**
-    * In production, we use `migrate deploy` to apply migrations in a controlled and secure way.
-  * **Data visualization:** `npx prisma studio`
-    * Prisma Studio is a visual tool that helps us manage and visualize bank data in an intuitive way.
+### 7. Run Database Migrations
 
-Define the [DATABASE_URL](https://github.com/code-chat-br/whatsapp-api/blob/6d0ab3e27932c5d1a6d8275dc3c6cb5097ff099e/.env.dev#L48) environment variable for the database deployment.
+Prisma ORM is used to manage the database schema. Run the following command to apply the necessary migrations.
 
-* Performing the database [deployment](https://www.prisma.io/docs/orm/reference/prisma-cli-reference#migrate-deploy).
 ```sh
+# This script runs 'npx prisma migrate deploy'
 bash deploy_db.sh
 ```
 
-Finally, run the command below to start the application:
+You can also use `npx prisma studio` to open a visual editor for your database.
+
+### 8. Start the Application
+
+You can run the application in development or production mode.
+
+**Development Mode:**
 ```sh
 npm run start:dev
-
-npm run start:prod
-
-# pm2
-pm2 start 'npm run start:prod' --name CodeChat_API_v1.3.0
 ```
----
 
-## Worker
+**Production Mode:**
+```sh
+npm run start:prod
+```
 
-### Worker options for session management
+**Using PM2 for Production:**
+```sh
+pm2 start 'npm run start:prod' --name CodeChat_API
+```
+
+## 📚 API Documentation
+
+The API is documented using Swagger (OpenAPI 3.0). Once the application is running, you can access the interactive documentation at:
+
+**http://localhost:8084/docs**
+
+The Swagger definition file can be found at `docs/swagger.yaml`.
+
+## 🔐 Authentication
+
+The API supports two types of authentication, configured in the `.env` file:
+
+1.  **JWT (JSON Web Token):** A token is generated when a new instance is created. This token is specific to that instance and must be included in the header of subsequent requests for that instance.
+2.  **Global API Key:** A single, global token that can be defined in your `.env` file. This key provides access to all instances and is useful for administrative tasks.
+
+## 🔌 Webhooks
+
+The API can send real-time notifications for various events via webhooks. Configure your webhook URL through the API to receive events.
+
+| Name                        | Event                       | Description                                                                           |
+| --------------------------- | --------------------------- | ------------------------------------------------------------------------------------- |
+| `qrcode.updated`            | QRCODE\_UPDATED             | Sends the base64 QR code for authentication.                                          |
+| `connection.update`         | CONNECTION\_UPDATE          | Notifies about connection status changes (e.g., 'open', 'close').                     |
+| `messages.set`              | MESSAGES\_SET               | Sends the initial list of all messages. (Occurs once)                                 |
+| `messages.upsert`           | MESSAGES\_UPSERT            | Triggered when a new message is received.                                             |
+| `messages.update`           | MESSAGES\_UPDATE            | Triggered when a message is updated (e.g., read status).                              |
+| `send.message`              | SEND\_MESSAGE               | Notifies when a message is sent from the API.                                         |
+| `contacts.set`              | CONTACTS\_SET               | Sends the initial list of all contacts. (Occurs once)                                 |
+| `contacts.upsert`           | CONTACTS\_UPSERT            | Reloads all contacts with additional information. (Occurs once)                       |
+| `contacts.update`           | CONTACTS\_UPDATE            | Triggered when a contact's information is updated.                                    |
+| `presence.update`           | PRESENCE\_UPDATE            | Informs about a contact's presence (online, typing, recording).                       |
+| `chats.set`                 | CHATS\_SET                  | Sends the initial list of all chats.                                                  |
+| `chats.update`              | CHATS\_UPDATE               | Triggered when a chat is updated.                                                     |
+| `chats.upsert`              | CHATS\_UPSERT               | Sends information about any new chat.                                                 |
+| `chats.delete`              | CHATS\_DELETE               | Notifies when a chat is deleted.                                                      |
+| `groups.upsert`             | GROUPS\_UPSERT              | Notifies when a group is created.                                                     |
+| `groups.update`             | GROUPS\_UPDATE              | Notifies when group information is updated.                                           |
+| `group-participants.update` | GROUP\_PARTICIPANTS\_UPDATE | Notifies about participant actions (add, remove, promote, demote).                    |
+| `refresh.token`             | REFRESH\_TOKEN              | Notifies when the instance's JWT token is updated.                                    |
+| `call.upsert`               | CALL\_UPSERT                | Notifies about new incoming or outgoing calls.                                        |
+| `labels.association`        | LABELS\_ASSOCIATION         | Associates labels with chats or contacts.                                             |
+| `labels.edit`               | LABELS\_EDIT                | Notifies when a label is edited.                                                      |
+
+## 🏢 Worker Session Management
+
+For more robust session management, you can use an external worker. This is recommended for production environments.
 
 - **[session-manager:files-v0.0.1](https://github.com/code-chat-br/session-manager)**
 - **[session-manager:sqlite-v0.0.1](https://github.com/code-chat-br/session-manager/tree/sqlite)**
 
-To use the worker with the API it is necessary to define the following environment variables in the API:
+To use a worker, set the following environment variables in the API's `.env` file:
 
-- `PROVIDER_ENABLED=true`: This variable enables the use of the provider (worker) in the API.
-- `PROVIDER_HOST=127.0.0.1`: Defines the host where the worker is listening for requests.
-- `PROVIDER_PORT=5656`: Defines the port where the worker is listening for requests.
-- `PROVIDER_PREFIX=codechat`: Set prefix for instance grouping on worker
+-   `PROVIDER_ENABLED=true`
+-   `PROVIDER_HOST=127.0.0.1` (or the worker's host)
+-   `PROVIDER_PORT=5656` (or the worker's port)
+-   `PROVIDER_PREFIX=codechat` (a prefix for grouping instances)
+
+## 📡 WebSocket
+
+Real-time event streaming is available via WebSocket. For more details on how to connect and use it, please [read the WebSocket documentation](./src/websocket/Readme.md).
+
+## 🐳 Docker Deployment
+
+A `docker-compose.yml` file is provided for easy deployment of the entire application stack.
+
+-   **DockerHub Image:** [codechat/api](https://hub.docker.com/r/codechat/api/tags)
+
+To build and run the application using Docker Compose:
+
+```sh
+docker-compose up --build
+```
 
 ---
 
-## WebSocket
-websocket compatibility added.
-[Read here.](./src/websocket/Readme.md)
+## 📜 License
 
-## Swagger - OpenAPI 3.0.0
+This project is licensed under the Apache License, Version 2.0. See the [LICENSE](./LICENSE) file for details.
 
-* Route: `http://localhost:8084/docs`
-* YAML file: [swagger.yaml](./src/docs/swagger.yaml)
+## 💖 Support the Project
 
-## Authentication
+This is an open-source project that I maintain in my free time. If you find it useful, please consider supporting its development.
 
-You can define two authentication **types** for the routes in the **[env file](./env.dev)**.
-Authentications must be inserted in the request header.
-
-1. **jwt:** A JWT is a standard for authentication and information exchange defined with a signature.
-
-> Authentications are generated at instance creation time.
-
-**Note:** There is also the possibility to define a global api key, which can access and control all instances.
-
-### App in Docker
-  - [docker-compose](./docker-compose.yml)
-  - [DockerHub-codechat/api](https://hub.docker.com/r/codechat/api/tags)
-  
-
-After building the application, in the same directory as the files above, run the following command:
-```sh
-docker-compose up
-```
-## Send Messages
-|     |   |
-|-----|---|
-| Send Text | ✔ |
-| Send Buttons | ❌ |
-| Send Media: audio - video - image - document - gif <br></br>base64: ```false``` | ✔ |
-| Send Media File | ✔ |
-| Send Audio type WhatsApp | ✔ |
-| Send Audio type WhatsApp - File | ✔ |
-| Send Location | ✔ |
-| Send List | ❌ |
-| Send Link Preview | ✔ |
-| Send Contact | ✔ |
-| Send Reaction - emoji | ✔ |
-
-## Postman collections
-  - [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/codechat/codechat-api/overview)
-
-## Webhook Events
-
-| Name                        | Event                       | TypeData | Description                                                                           |
-| --------------------------- | --------------------------- | -------- | ------------------------------------------------------------------------------------- | 
-| QRCODE\_UPDATED             | `qrcode.updated`            | JSON     | Sends the base64 of the QR code for reading                                           |
-| CONNECTION\_UPDATE          | `connection.update`         | JSON     | Informs the status of the connection with WhatsApp                                    |
-| MESSAGES\_SET               | `messages.set`              | JSON     | Sends a list of all your messages uploaded on WhatsApp<br>This event occurs only once |
-| MESSAGES\_UPSERT            | `messages.upsert`           | JSON     | Notifies you when a message is received                                               |
-| MESSAGES\_UPDATE            | `messages.update`           | JSON     | Tells you when a message is updated                                                   |
-| SEND\_MESSAGE               | `send.message`              | JSON     | Notifies when a message is sent                                                       |
-| CONTACTS\_SET               | `contacts.set`              | JSON     | Performs initial loading of all contacts<br>This event occurs only once               |
-| CONTACTS\_UPSERT            | `contacts.upsert`           | JSON     | Reloads all contacts with additional information<br>This event occurs only once       |
-| CONTACTS\_UPDATE            | `contacts.update`           | JSON     | Informs you when a contact is updated                                                 |
-| PRESENCE\_UPDATE            | `presence.update`           | JSON     | Informs if the user is online, typing, recording, or last seen<br>`unavailable` `available` `composing` `recording` `paused` |
-| CHATS\_SET                  | `chats.set`                 | JSON     | Sends a list of all loaded chats                                                      |
-| CHATS\_UPDATE               | `chats.update`              | JSON     | Informs you when the chat is updated                                                  |
-| CHATS\_UPSERT               | `chats.upsert`              | JSON     | Sends any new chat information                                                        |
-| CHATS\_DELETE               | `chats.delete`              | JSON     | Informs when a chat is deleted                                                        |
-| GROUPS\_UPSERT              | `groups.upsert`             | JSON     | Notifies when a group is created                                                      |
-| GROUPS\_UPDATE              | `groups.update`             | JSON     | Notifies when a group has its information updated                                     |
-| GROUP\_PARTICIPANTS\_UPDATE | `group-participants.update` | JSON     | Notifies when an action occurs involving a participant<br>`add` `remove` `promote` `demote`|
-| REFRESH\_TOKEN              | `refresh.token`             | JSON     | Notifies when the JWT token is updated                                                |
-| CALL\_UPSERT                | `call.upsert`               | JSON     | Notifies when there is a new call event                                               |
-| LABELS\_ASSOCIATION         | `labels.association`        | JSON     | Associates labels to chats or contacts                                                |
-| LABELS\_EDIT                | `labels.edit`               | JSON     | Notifies when a label is edited                                                       |
-
-
-
-## SSL
-
-To install the SSL certificate, follow the **[instructions](https://certbot.eff.org/instructions?ws=other&os=ubuntufocal)** below.
-
-# Note
-
-This code is in no way affiliated with WhatsApp. Use at your own discretion. Don't spam this.
-
-This code was produced based on the baileys library and it is still under development.
-
-# Donate to the project.
-
-#### Pix: 2b526ada-4ef4-4db4-bbeb-f60da2421fce
+#### Pix: `2b526ada-4ef4-4db4-bbeb-f60da2421fce`
 
 #### PicPay
 
 <div align="center">
   <a href="https://app.picpay.com/user/cleber.wilson.oliveira" target="_blank" rel="noopener noreferrer">
-    <img src="./public/images/picpay-image.png" style="width: 50% !important;">
+    <img src="./public/images/picpay-image.png" alt="Donate with PicPay" style="width: 50%;">
   </a>
 </div>
 
-</br>
+> **Disclaimer:** This code is in no way affiliated with, authorized, maintained, sponsored, or endorsed by WhatsApp or any of its affiliates or subsidiaries. Use at your own risk. Do not use this for spamming.

@@ -32,9 +32,29 @@
  * └──────────────────────────────────────────────────────────────────────────────┘
  */
 
+/**
+ * @class MediaDto
+ * @description DTO for media data.
+ */
 export class MediaDto {
+  /**
+   * @property {number | string} [id]
+   * @description The ID of the media.
+   */
   id?: number | string;
+  /**
+   * @property {string} [type]
+   * @description The type of the media.
+   */
   type?: string;
+  /**
+   * @property {number} [messageId]
+   * @description The ID of the message containing the media.
+   */
   messageId?: number;
+  /**
+   * @property {number} [expiry]
+   * @description The expiry time for the media URL.
+   */
   expiry?: number;
 }

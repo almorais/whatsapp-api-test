@@ -35,8 +35,32 @@
 
 import { join } from 'path';
 
+/**
+ * @constant {string} ROOT_DIR
+ * @description The root directory of the application.
+ */
 export const ROOT_DIR = process.cwd();
+
+/**
+ * @constant {string} INSTANCE_DIR
+ * @description The directory where instances are stored.
+ */
 export const INSTANCE_DIR = join(ROOT_DIR, 'instances');
+
+/**
+ * @constant {string} SRC_DIR
+ * @description The source directory of the application.
+ */
 export const SRC_DIR = join(ROOT_DIR, 'src');
+
+/**
+ * @constant {string} AUTH_DIR
+ * @description The directory where authentication files are stored.
+ */
 export const AUTH_DIR = join(ROOT_DIR, 'store', 'auth');
+
+/**
+ * @constant {string} TYPEBOT_DIR
+ * @description The directory where Typebot files are stored.
+ */
 export const TYPEBOT_DIR = join(ROOT_DIR, 'store', 'typebot');

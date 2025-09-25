@@ -33,21 +33,38 @@
  * └──────────────────────────────────────────────────────────────────────────────┘
  */
 
+/**
+ * @class CreateGroupDto
+ * @description DTO for creating a new group.
+ */
 export class CreateGroupDto {
   subject: string;
   description?: string;
   participants: string[];
 }
 
+/**
+ * @class GroupPictureDto
+ * @description DTO for updating the group picture.
+ */
 export class GroupPictureDto {
   groupJid: string;
   image: string;
 }
 
+/**
+ * @class GroupJid
+ * @description DTO for a group JID.
+ */
 export class GroupJid {
   groupJid: string;
 }
 
+/**
+ * @class GroupUpdateParticipantDto
+ * @extends GroupJid
+ * @description DTO for updating group participants.
+ */
 export class GroupUpdateParticipantDto extends GroupJid {
   action: 'add' | 'remove' | 'promote' | 'demote';
   participants: string[];

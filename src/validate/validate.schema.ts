@@ -47,6 +47,12 @@
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import { ulid } from 'ulid';
 
+/**
+ * @function isNotEmpty
+ * @description A helper function to create a JSON schema that ensures specified properties are not empty.
+ * @param {...string[]} propertyNames - The names of the properties to check.
+ * @returns {JSONSchema7} A JSON schema object.
+ */
 const isNotEmpty = (...propertyNames: string[]): JSONSchema7 => {
   const properties = {};
   propertyNames.forEach(
@@ -67,6 +73,10 @@ const isNotEmpty = (...propertyNames: string[]): JSONSchema7 => {
 };
 
 // Instance Schema
+/**
+ * @constant {JSONSchema7} instanceNameSchema
+ * @description JSON schema for validating instance creation data.
+ */
 export const instanceNameSchema: JSONSchema7 = {
   $id: ulid(),
   type: 'object',

@@ -65,6 +65,12 @@ const minioClient = (() => {
 
 const bucketName = process.env.S3_BUCKET;
 
+/**
+ * @function bucketExists
+ * @private
+ * @description Checks if the configured S3 bucket exists.
+ * @returns {Promise<boolean>} A promise that resolves to true if the bucket exists, false otherwise.
+ */
 const bucketExists = async () => {
   if (minioClient) {
     try {
@@ -76,6 +82,12 @@ const bucketExists = async () => {
   }
 };
 
+/**
+ * @function createBucket
+ * @private
+ * @description Creates the S3 bucket if it does not already exist.
+ * @returns {Promise<boolean>} A promise that resolves to true if the bucket is created or already exists, false otherwise.
+ */
 const createBucket = async () => {
   if (minioClient) {
     try {
@@ -92,6 +104,15 @@ const createBucket = async () => {
 
 createBucket();
 
+/**
+ * @function uploadFile
+ * @description Uploads a file to the S3 bucket.
+ * @param {string} fileName - The name of the file to upload.
+ * @param {Buffer | Transform | Readable} file - The file content as a buffer, transform stream, or readable stream.
+ * @param {number} size - The size of the file.
+ * @param {Metadata} metadata - The metadata for the file.
+ * @returns {Promise<any>} A promise that resolves with the result of the upload operation.
+ */
 const uploadFile = async (
   fileName: string,
   file: Buffer | Transform | Readable,
@@ -124,6 +145,14 @@ const uploadFile = async (
   }
 };
 
+/**
+ * @function getObjectUrl
+ * @description Generates a presigned URL for an object in the S3 bucket.
+ * @param {string} fileName - The name of the file.
+ * @param {number} [expiry] - The expiry time for the URL in seconds.
+ * @returns {Promise<string>} A promise that resolves to the presigned URL.
+ * @throws {BadRequestException} If there is an error generating the URL.
+ */
 const getObjectUrl = async (fileName: string, expiry?: number) => {
   if (minioClient) {
     try {

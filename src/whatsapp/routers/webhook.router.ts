@@ -42,6 +42,13 @@ import { HttpStatus } from '../../app.module';
 import { WebhookController } from '../controllers/webhook.controller';
 import { dataValidate, routerPath } from '../../validate/router.validate';
 
+/**
+ * @function WebhookRouter
+ * @description Creates and configures an Express router for webhook-related endpoints.
+ * @param {WebhookController} webhookController - The webhook controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function WebhookRouter(
   webhookController: WebhookController,
   ...guards: RequestHandler[]

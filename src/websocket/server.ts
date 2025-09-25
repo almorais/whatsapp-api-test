@@ -43,13 +43,30 @@ import { verify } from 'jsonwebtoken';
 import { JwtPayload } from '../whatsapp/services/instance.service';
 import { EventsType, ListEvents } from '../whatsapp/dto/webhook.dto';
 
+/**
+ * @class Websocket
+ * @description Manages WebSocket connections for real-time event broadcasting.
+ */
 export class Websocket {
+  /**
+   * @constructor
+   * @param {ConfigService} configService - The configuration service instance.
+   */
   constructor(private readonly configService: ConfigService) {}
 
   private readonly logger = new Logger(this.configService, Websocket.name);
 
   private readonly hub = new Map<string, Ws>();
 
+  /**
+   * @method send
+   * @template T
+   * @description Sends data to a specific instance and event via WebSocket.
+   * @param {string} instance - The instance name.
+   * @param {EventsType} event - The event type.
+   * @param {T} data - The data to send.
+   * @returns {boolean} True if the message was sent, false otherwise.
+   */
   send<T>(instance: string, event: EventsType, data: T): boolean {
     const key = `${instance}_${event}`;
     const client = this.hub.get(key);
@@ -62,6 +79,11 @@ export class Websocket {
     client.send(json);
   }
 
+  /**
+   * @method server
+   * @description Sets up the WebSocket server and handles connection upgrades.
+   * @param {Server} server - The HTTP server instance.
+   */
   server(server: Server) {
     const wss = new Ws.Server({ noServer: true });
 

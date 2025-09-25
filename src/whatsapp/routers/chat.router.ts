@@ -68,6 +68,13 @@ import { ChatController } from '../controllers/chat.controller';
 import { routerPath, dataValidate } from '../../validate/router.validate';
 import FormData from 'form-data';
 
+/**
+ * @function ChatRouter
+ * @description Creates and configures an Express router for chat-related endpoints.
+ * @param {ChatController} chatController - The chat controller instance.
+ * @param {...RequestHandler[]} guards - Optional request handlers (guards) to be applied to the routes.
+ * @returns {Router} The configured Express router.
+ */
 export function ChatRouter(chatController: ChatController, ...guards: RequestHandler[]) {
   const router = Router()
     .post(routerPath('whatsappNumbers'), ...guards, async (req, res) => {
